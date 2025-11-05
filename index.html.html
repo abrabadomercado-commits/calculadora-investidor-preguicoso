@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora da Fórmula do Investidor Preguiçoso</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0b0b0b;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  .container {
+    background-color: #111;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px #00c48c55;
+    width: 400px;
+    text-align: center;
+  }
+  h2 {
+    color: #d4af37;
+    margin-bottom: 10px;
+  }
+  p {
+    color: #aaa;
+    font-size: 14px;
+    margin-bottom: 20px;
+  }
+  input {
+    width: 90%;
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 16px;
+  }
+  button {
+    background-color: #00c48c;
+    color: #000;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  button:hover {
+    background-color: #00a574;
+  }
+  #resultado {
+    margin-top: 20px;
+    font-size: 18px;
+    color: #d4af37;
+  }
+  canvas {
+    margin-top: 20px;
+    width: 100% !important;
+    height: 250px !important;
+  }
+  .cta {
+    background-color: #d4af37;
+    color: #000;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-top: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .cta:hover {
+    background-color: #b8962d;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h2>Calculadora da Fórmula do Investidor Preguiçoso</h2>
+    <p>Descubra quanto seu dinheiro pode render aplicando o método certo 💰</p>
+
+    <input type="number" id="valorInicial" placeholder="Valor inicial (R$)" />
+    <input type="number" id="aporteMensal" placeholder="Aporte mensal (R$)" />
+    <input type="number" id="taxa" placeholder="Taxa de juros (%) ao mês" />
+    <input type="number" id="periodo" placeholder="Período (em meses)" />
+    <button onclick="calcular()">Calcular</button>
+
+    <div id="resultado"></div>
+    <canvas id="grafico"></canvas>
+
+    <a href="https://seulink.com" target="_blank" class="cta">🔥 Quero ativar a Fórmula do Investidor Preguiçoso</a>
+  </div>
+
+  <script>
+    let grafico;
+
+    function calcular() {
+      const valorInicial = parseFloat(document.getElementById('valorInicial').value);
+      const aporteMensal = parseFloat(document.getElementById('aporteMensal').value);
+      const taxa = parseFloat(document.getElementById('taxa').value) / 100;
+      const periodo = parseInt(document.getElementById('periodo').value);
+
+      if (isNaN(valorInicial) || isNaN(aporteMensal) || isNaN(taxa) || isNaN(periodo)) {
+        document.getElementById('resultado').innerText = "⚠️ Preencha todos os campos corretamente!";
+        return;
+      }
+
+      let montante = valorInicial;
+      const valores = [valorInicial];
+      for (let i = 1; i <= periodo; i++) {
+        montante = montante * (1 + taxa) + aporteMensal;
+        valores.push(montante);
+      }
+
+      document.getElementById('resultado').innerText =
+        `📊 Após ${periodo} meses, você terá aproximadamente R$ ${montante.toFixed(2).replace('.', ',')}`;
+
+      // Criar gráfico
+      const ctx = document.getElementById('grafico').getContext('2d');
+      if (grafico) grafico.destroy();
+
+      grafico = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: Array.from({ length: periodo + 1 }, (_, i) => i),
+          datasets: [{
+            label: 'Crescimento do investimento (R$)',
+            data: valores,
+            borderColor: '#00c48c',
+            backgroundColor: '#00c48c33',
+            fill: true,
+            tension: 0.25
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#fff' } }
+          },
+          scales: {
+            x: { ticks: { color: '#d4af37' } },
+            y: { ticks: { color: '#d4af37' } }
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
